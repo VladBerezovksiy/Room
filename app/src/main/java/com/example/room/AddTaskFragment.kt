@@ -18,7 +18,7 @@ class AddTaskFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.add_employee_fragment, container, false)
+        return inflater.inflate(R.layout.add_task_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,6 +33,7 @@ class AddTaskFragment : Fragment() {
             val desc = descInput.text.toString()
             viewModel.add(name, desc)
             parentFragmentManager.popBackStack()
+            view.clearFocus()
         }
     }
 }
