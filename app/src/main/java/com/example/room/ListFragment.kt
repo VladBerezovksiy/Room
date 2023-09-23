@@ -14,6 +14,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class ListFragment : Fragment() {
 
     private lateinit var viewModel: TaskViewModel
+    private lateinit var plusFab: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +28,7 @@ class ListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(requireActivity()).get(TaskViewModel::class.java)
         val listView: RecyclerView = view.findViewById(R.id.list)
-        val plusFab: FloatingActionButton = view.findViewById(R.id.plusFab)
+        plusFab = view.findViewById(R.id.plusFab)
         val adapter = TaskListAdapter()
         listView.adapter = adapter
         listView.layoutManager = LinearLayoutManager(requireContext())
@@ -42,11 +43,18 @@ class ListFragment : Fragment() {
         }
 
         plusFab.setOnClickListener {
+            plusFab.isEnabled = false
             val fragment = AddTaskFragment()
             parentFragmentManager.beginTransaction()
                 .add(R.id.container, fragment)
                 .addToBackStack(fragment.javaClass.name)
                 .commit()
+        }
+
+        parentFragmentManager.addOnBackStackChangedListener {
+            if (parentFragmentManager.backStackEntryCount == 0) {
+                plusFab.isEnabled = true
+            }
         }
 
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
@@ -71,5 +79,4 @@ class ListFragment : Fragment() {
         })
         itemTouchHelper.attachToRecyclerView(listView)
     }
-
 }
